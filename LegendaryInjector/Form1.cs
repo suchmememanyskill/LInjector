@@ -31,11 +31,16 @@ namespace LegendaryForceInstaller
         public Form1()
         {
             InitializeComponent();
-            installedGames = JsonConvert.DeserializeObject<Dictionary<string, InstalledJson>>(File.ReadAllText(Path.Combine(GetLegendaryPath(), "installed.json")));
-            foreach (var x in installedGames)
+            string path = Path.Combine(GetLegendaryPath(), "installed.json");
+            if (!File.Exists(path))
             {
-                cb_dumpgames.Items.Add(x.Value.AppName);
+                installedGames = new Dictionary<string, InstalledJson>();
+                return;
             }
+
+            installedGames = JsonConvert.DeserializeObject<Dictionary<string, InstalledJson>>(File.ReadAllText(path));
+            foreach (var x in installedGames)
+                cb_dumpgames.Items.Add(x.Value.AppName);
         }
 
         private void btn_dumpgame_Click(object sender, EventArgs e)
